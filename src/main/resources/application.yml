@@ -1,0 +1,14 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: spring-security
+  redis:
+    port: 6379
+    host: localhost
+  datasource:
+    username: root
+    password: newpassword
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/security?serverTimezone=Asia/Shanghai
+    type: com.alibaba.druid.pool.DruidDataSource
