@@ -23,9 +23,9 @@ public class HelloController {
         return "hello security!";
     }
 
-    @GetMapping("/dba/hello")
+    @GetMapping("/db/hello")
     public String dba(){
-        return "hello dba!";
+        return "hello db!";
     }
 
     @GetMapping("/admin/hello")
