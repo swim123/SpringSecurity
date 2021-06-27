@@ -52,11 +52,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/js/**", "/css/**","/images/**");
-    }
-
     @Bean
     RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
@@ -65,20 +60,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return roleHierarchy;
     }
 
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/static/**","/js/**", "/css/**","/images/**");
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     @Override
-                    public <O extends FilterSecurityInterceptor> O postProcess(O object) {
-                        object.setSecurityMetadataSource(myFilter);
-                        object.setAccessDecisionManager(myAccessDecisionManager);
-                        return object;
+                    public <O extends FilterSecurityInterceptor> O postProcess(O o) {
+                        o.setAccessDecisionManager(myAccessDecisionManager);
+                        o.setSecurityMetadataSource(myFilter);
+                        return o;
                     }
+
                 })
-                .antMatchers("/loginPage.html","/login")
-                .permitAll()
+//                .antMatchers("/loginPage.html","/login")   已经放入了数据库动态配置 所有这些手动的配置均会失效
+//                .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -86,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login")//登录表单form中action的地址，也就是处理认证请求的路径
                 .usernameParameter("uname")   //登录表单form中用户名输入框input的name名，不修改的话默认是username
                 .passwordParameter("passwd")   //form中密码输入框input的name名，不修改的话默认是password
-//                    .defaultSuccessUrl("/index")    //登录认证成功后默认转跳的路径
+//                .defaultSuccessUrl("/loginSuc")    //登录认证成功后默认转跳的路径
                 .successHandler(new AuthenticationSuccessHandler() {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse resp, Authentication authentication) throws IOException, ServletException {
@@ -102,8 +102,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 })
                 .permitAll()
                 .and()
-                .csrf()
-                .disable();
+                .logout()
+                .and()
+                .csrf().disable();
     }
 
 }

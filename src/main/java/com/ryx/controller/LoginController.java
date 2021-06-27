@@ -2,6 +2,9 @@ package com.ryx.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @BelongsPackage: com.ryx.controller
@@ -12,9 +15,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class LoginController {
 
-//    @GetMapping("/loginPage")
-//    public String loginPage(){
-//        return "loginPage";
-//    }
+    @GetMapping("/index")
+    public String loginPage(){
+        return "index";
+    }
+
+    @GetMapping("/login")
+    @ResponseBody
+    public String loginPost(){
+        return "登录成功";
+    }
 
 }
