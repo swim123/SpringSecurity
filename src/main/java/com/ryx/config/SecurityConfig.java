@@ -86,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login")//登录表单form中action的地址，也就是处理认证请求的路径
                 .usernameParameter("uname")   //登录表单form中用户名输入框input的name名，不修改的话默认是username
                 .passwordParameter("passwd")   //form中密码输入框input的name名，不修改的话默认是password
-//                .defaultSuccessUrl("/login")    //登录认证成功后默认转跳的路径
+//                .defaultSuccessUrl("/loginSuc")    //登录认证成功后默认转跳的路径
                 .successHandler(new AuthenticationSuccessHandler() {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse resp, Authentication authentication) throws IOException, ServletException {
@@ -101,6 +101,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     }
                 })
                 .permitAll()
+                .and()
+                .logout()
                 .and()
                 .csrf().disable();
     }
