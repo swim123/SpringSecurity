@@ -11,6 +11,5 @@ import java.util.List;
  * @Description:
  */
 public interface MenuMapper {
-
     List<Menu> getAllMenus();
 }

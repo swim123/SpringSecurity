@@ -15,15 +15,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class LoginController {
 
-    @GetMapping("/index")
-    public String loginPage(){
-        return "index";
-    }
+//    @GetMapping("/index")
+//    public String loginPage(){
+//        return "index";
+//    }
 
     @GetMapping("/login")
     @ResponseBody
     public String loginPost(){
         return "登录成功";
     }
+
+
+    @GetMapping("/loginSuc")
+//    @ResponseBody
+    public String loginSuc(){
+        return "index";
+    }
+
 
 }

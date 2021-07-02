@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -86,23 +87,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login")//登录表单form中action的地址，也就是处理认证请求的路径
                 .usernameParameter("uname")   //登录表单form中用户名输入框input的name名，不修改的话默认是username
                 .passwordParameter("passwd")   //form中密码输入框input的name名，不修改的话默认是password
-//                .defaultSuccessUrl("/loginSuc")    //登录认证成功后默认转跳的路径
-                .successHandler(new AuthenticationSuccessHandler() {
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse resp, Authentication authentication) throws IOException, ServletException {
-                        resp.setContentType("application/json; charset=UTF-8");
-                        HashMap<String, Object> map = new HashMap<>();
-                        map.put("status",200);
-                        map.put("msg", authentication.getPrincipal());
-                        PrintWriter out = resp.getWriter();
-                        out.write(new ObjectMapper().writeValueAsString(map));
-                        out.flush();
-                        out.close();
-                    }
-                })
+                .defaultSuccessUrl("/loginSuc")    //登录认证成功后默认转跳的路径 重定向
+//                .successHandler(new AuthenticationSuccessHandler() {
+//                    @Override
+//                    public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse resp, Authentication authentication) throws IOException, ServletException {
+//                        resp.setContentType("application/json; charset=UTF-8");
+//                        HashMap<String, Object> map = new HashMap<>();
+//                        map.put("status",200);
+//                        map.put("msg", authentication.getPrincipal());
+//                        PrintWriter out = resp.getWriter();
+//                        out.write(new ObjectMapper().writeValueAsString(map));
+//                        out.flush();
+//                        out.close();
+//                    }
+//                })
                 .permitAll()
                 .and()
                 .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout","GET"))   //设置注销的方式
+                .logoutSuccessUrl("/loginPage.html")    //注销成功跳转到登录页面
+                .invalidateHttpSession(true)  //是否要让session失效  默认为true
+                .clearAuthentication(true)  //clear认证信息  默认为true
+                .permitAll()
                 .and()
                 .csrf().disable();
     }
